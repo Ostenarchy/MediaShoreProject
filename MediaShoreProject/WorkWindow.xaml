@@ -75,6 +75,7 @@
         <StackPanel Grid.Row="2" Orientation="Horizontal">
             <TextBlock x:Name="textBlockUserRole" Text="ROLE:"/>
             <TextBlock Margin="5,0,0,0" x:Name="textBlockUserFIO" Text="NICKNAME"/>
+            <TextBlock Margin="5,0,0,0" x:Name="textBlockBalance" Text="(BALANCE)"/>
             <Button x:Name="btnCart" Content="Корзина (0)" Margin="20,0,0,0" Click="btnCart_Click" Width="120"/>
         </StackPanel>
 

@@ -30,6 +30,7 @@ namespace MediaShoreProject
             if (currentRole != null)
             {
                 textBlockUserRole.Text = $"{currentRole.roleName}: ";
+                textBlockBalance.Text = $"({currentUser.userBalance} руб.)";
             }
         }
 
@@ -71,6 +72,7 @@ namespace MediaShoreProject
             // 3. Этот код сработает СРАЗУ ПОСЛЕ закрытия CartWindow
             LoadDiscs();         // Перезагрузит список дисков из БД (обновит "Осталось")
             UpdateCartCounter(); // Обновит текст на самой кнопке "Корзина (n)"
+            textBlockBalance.Text = $"({currentUser.userBalance} руб.)";
         }
 
         private Orders GetOrCreateCart()
@@ -135,15 +137,34 @@ namespace MediaShoreProject
             var selectedDisc = (sender as Button)?.DataContext as Discs;
             if (selectedDisc == null || currentUser == null) return;
 
-            // ПРОВЕРКА: Если на складе 0, не даем добавить
-            if (selectedDisc.discQuantityInStock <= 0)
-            {
-                MessageBox.Show("Товар закончился на складе!");
-                return;
-            }
-
             try
             {
+                // 1. Проверка на наличие на складе
+                if (selectedDisc.discQuantityInStock <= 0)
+                {
+                    MessageBox.Show("Этого товара больше нет в наличии!", "Склад");
+                    return;
+                }
+
+                // 2. Проверка на баланс
+                // Считаем общую сумму того, что УЖЕ в корзине
+                var cartOrder = App.db.Orders.FirstOrDefault(o => o.userID == currentUser.id && o.statusID == 4);
+                int currentCartSum = 0;
+                if (cartOrder != null)
+                {
+                    currentCartSum = App.db.OrderItem
+                        .Where(oi => oi.orderID == cartOrder.id)
+                        .Sum(oi => (int?)(oi.quantity * oi.PriceAtTime)) ?? 0;
+                }
+
+                // Проверяем: хватит ли денег на текущую корзину + новый выбранный диск
+                if (currentUser.userBalance < (currentCartSum + selectedDisc.discPrice))
+                {
+                    MessageBox.Show($"Недостаточно средств на балансе для добавления \"{selectedDisc.discName}\"!", "Баланс");
+                    return;
+                }
+
+                // 3. Если проверки пройдены — добавляем в корзину
                 var order = GetOrCreateCart();
                 var orderItem = App.db.OrderItem.FirstOrDefault(oi => oi.orderID == order.id && oi.discID == selectedDisc.id);
 
@@ -162,12 +183,11 @@ namespace MediaShoreProject
                     });
                 }
 
-                // УМЕНЬШАЕМ количество на складе
+                // 4. Обновляем склад и БД
                 selectedDisc.discQuantityInStock--;
-
                 App.db.SaveChanges();
 
-                // ОБНОВЛЯЕМ интерфейс
+                // 5. Обновляем UI
                 UpdateCartCounter();
                 lbDisc.Items.Refresh();
             }

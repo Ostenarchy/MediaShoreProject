@@ -31,28 +31,50 @@ namespace MediaShoreProject
         }
         private void LoadCart()
         {
+            // 1. Ищем текущую корзину пользователя (статус 4)
             currentOrder = App.db.Orders.FirstOrDefault(o => o.userID == user.id && o.statusID == 4);
+
             if (currentOrder != null)
             {
+                // 2. Получаем список всех позиций в этой корзине
                 var items = App.db.OrderItem.Where(oi => oi.orderID == currentOrder.id).ToList();
                 lbCartItems.ItemsSource = items;
 
-                // Считаем общую сумму
-                int total = items.Sum(i => (i.quantity ?? 0) * (i.PriceAtTime ?? 0));
+                // 3. Считаем итоговую сумму
+                // Используем (int?), чтобы Sum не падал на пустом списке, и ?? 0 для замены null на ноль
+                int total = items.Sum(i => (int?)((i.quantity ?? 0) * (i.PriceAtTime ?? 0))) ?? 0;
+
                 txtTotalSum.Text = $"Итого: {total} руб.";
 
-                // Проверка баланса
-                if (user.userBalance < total)
+                // 4. Логика кнопки оформления
+                if (items.Count == 0)
                 {
+                    // Если в корзине пусто
+                    btnCheckout.IsEnabled = false;
+                    btnCheckout.Content = "Корзина пуста";
+                }
+                else if (user.userBalance < total)
+                {
+                    // Если денег не хватает
                     btnCheckout.IsEnabled = false;
                     btnCheckout.Content = "Недостаточно средств";
-                    btnCheckout.Background = Brushes.Gray;
+                    txtTotalSum.Foreground = System.Windows.Media.Brushes.Red;
                 }
                 else
                 {
+                    // Если всё отлично
                     btnCheckout.IsEnabled = true;
                     btnCheckout.Content = "Оформить заказ";
+                    txtTotalSum.Foreground = System.Windows.Media.Brushes.Black;
                 }
+            }
+            else
+            {
+                // Если заказа со статусом "Корзина" вообще не существует в БД
+                lbCartItems.ItemsSource = null;
+                txtTotalSum.Text = "Итого: 0 руб.";
+                btnCheckout.IsEnabled = false;
+                btnCheckout.Content = "Оформить заказ";
             }
         }
         private void btnPlus_Click(object sender, RoutedEventArgs e)
@@ -108,22 +130,43 @@ namespace MediaShoreProject
         {
             try
             {
-                int total = App.db.OrderItem.Where(oi => oi.orderID == currentOrder.id)
-                                            .Sum(i => (i.quantity ?? 0) * (i.PriceAtTime ?? 0));
+                // 1. Еще раз считаем итоговую сумму для надежности
+                int total = App.db.OrderItem
+                    .Where(oi => oi.orderID == currentOrder.id)
+                    .Sum(i => (i.quantity ?? 0) * (i.PriceAtTime ?? 0));
 
-                // Списываем баланс и меняем статус
-                user.userBalance -= total;
-                currentOrder.statusID = 3; // Оплачен
-                currentOrder.orderDateOfPurchase = DateTime.Now;
-                currentOrder.totalSum = total;
+                // 2. Финальная проверка на всякий случай
+                if (user.userBalance < total)
+                {
+                    MessageBox.Show($"Ошибка! Тебе не хватает {total - user.userBalance} руб. для совершения покупки.",
+                                    "Внимание", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    return;
+                }
 
-                App.db.SaveChanges();
-                MessageBox.Show("Заказ успешно оформлен!");
-                this.Close();
+                // 3. Подтверждение покупки
+                var result = MessageBox.Show($"С твоего баланса будет списано {total} руб. Продолжить?",
+                                             "Подтверждение", MessageBoxButton.YesNo);
+
+                if (result == MessageBoxResult.Yes)
+                {
+                    // 4. Списываем деньги
+                    user.userBalance -= total;
+
+                    // 5. Переводим заказ из состояния "Корзина" (4) в "Оплачен" (3)
+                    currentOrder.statusID = 3;
+                    currentOrder.totalSum = total;
+                    currentOrder.orderDateOfPurchase = DateTime.Now;
+
+                    // 6. Сохраняем всё в БД DIPLOMAT_01
+                    App.db.SaveChanges();
+
+                    MessageBox.Show("Заказ успешно оплачен! Спасибо за покупку.", "Успех");
+                    this.Close(); // Закрываем окно корзины
+                }
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Ошибка: " + ex.Message);
+                MessageBox.Show("Произошла ошибка при оплате: " + ex.Message);
             }
         }
     }
