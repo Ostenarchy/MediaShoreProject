@@ -1,0 +1,603 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="DIPLOMAT_01Model.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Authors">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="authorFirstName" Type="nvarchar" MaxLength="150" />
+          <Property Name="authorLastName" Type="nvarchar" MaxLength="150" />
+          <Property Name="authorEmail" Type="nvarchar" MaxLength="100" />
+        </EntityType>
+        <EntityType Name="DiscGenres">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="genreName" Type="nvarchar" MaxLength="150" />
+          <Property Name="typeID" Type="int" />
+        </EntityType>
+        <EntityType Name="Discs">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="discName" Type="nvarchar(max)" />
+          <Property Name="discAuthorID" Type="int" />
+          <Property Name="genreID" Type="int" />
+          <Property Name="discQuantityInStock" Type="int" />
+          <Property Name="discReleaseDate" Type="date" />
+          <Property Name="discDescription" Type="nvarchar(max)" />
+          <Property Name="discPrice" Type="int" />
+          <Property Name="discCoverPath" Type="nvarchar(max)" />
+        </EntityType>
+        <EntityType Name="DiscTypes">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="typeName" Type="nvarchar" MaxLength="100" />
+        </EntityType>
+        <EntityType Name="OrderItem">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="orderID" Type="int" />
+          <Property Name="discID" Type="int" />
+          <Property Name="quantity" Type="int" />
+          <Property Name="PriceAtTime" Type="int" />
+        </EntityType>
+        <EntityType Name="Orders">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="userID" Type="int" />
+          <Property Name="orderDateOfPurchase" Type="date" />
+          <Property Name="totalSum" Type="int" />
+          <Property Name="statusID" Type="int" />
+        </EntityType>
+        <EntityType Name="Roles">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="roleName" Type="nvarchar" MaxLength="100" />
+        </EntityType>
+        <EntityType Name="Statuses">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="statusName" Type="nvarchar" MaxLength="200" />
+        </EntityType>
+        <EntityType Name="Users">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="userName" Type="nvarchar" MaxLength="200" />
+          <Property Name="userPassword" Type="nvarchar" MaxLength="200" />
+          <Property Name="roleID" Type="int" />
+          <Property Name="userFirstName" Type="nvarchar" MaxLength="150" />
+          <Property Name="userLastName" Type="nvarchar" MaxLength="150" />
+          <Property Name="userEmail" Type="nvarchar" MaxLength="200" />
+          <Property Name="userBalance" Type="int" />
+          <Property Name="userRegDate" Type="date" />
+        </EntityType>
+        <Association Name="FK__DiscGenre__typeI__3B75D760">
+          <End Role="DiscTypes" Type="Self.DiscTypes" Multiplicity="0..1" />
+          <End Role="DiscGenres" Type="Self.DiscGenres" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="DiscTypes">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="DiscGenres">
+              <PropertyRef Name="typeID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Discs__discAutho__440B1D61">
+          <End Role="Authors" Type="Self.Authors" Multiplicity="0..1" />
+          <End Role="Discs" Type="Self.Discs" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Authors">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Discs">
+              <PropertyRef Name="discAuthorID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Discs__genreID__44FF419A">
+          <End Role="DiscGenres" Type="Self.DiscGenres" Multiplicity="0..1" />
+          <End Role="Discs" Type="Self.Discs" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="DiscGenres">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Discs">
+              <PropertyRef Name="genreID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__OrderItem__discI__5070F446">
+          <End Role="Discs" Type="Self.Discs" Multiplicity="0..1" />
+          <End Role="OrderItem" Type="Self.OrderItem" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Discs">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="OrderItem">
+              <PropertyRef Name="discID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__OrderItem__order__4F7CD00D">
+          <End Role="Orders" Type="Self.Orders" Multiplicity="0..1" />
+          <End Role="OrderItem" Type="Self.OrderItem" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Orders">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="OrderItem">
+              <PropertyRef Name="orderID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Orders__statusID__4CA06362">
+          <End Role="Statuses" Type="Self.Statuses" Multiplicity="0..1" />
+          <End Role="Orders" Type="Self.Orders" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Statuses">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Orders">
+              <PropertyRef Name="statusID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Orders__userID__4AB81AF0">
+          <End Role="Users" Type="Self.Users" Multiplicity="0..1" />
+          <End Role="Orders" Type="Self.Orders" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Orders">
+              <PropertyRef Name="userID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Users__roleID__403A8C7D">
+          <End Role="Roles" Type="Self.Roles" Multiplicity="0..1" />
+          <End Role="Users" Type="Self.Users" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Roles">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Users">
+              <PropertyRef Name="roleID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="DIPLOMAT_01ModelStoreContainer">
+          <EntitySet Name="Authors" EntityType="Self.Authors" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="DiscGenres" EntityType="Self.DiscGenres" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Discs" EntityType="Self.Discs" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="DiscTypes" EntityType="Self.DiscTypes" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="OrderItem" EntityType="Self.OrderItem" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Orders" EntityType="Self.Orders" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Roles" EntityType="Self.Roles" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Statuses" EntityType="Self.Statuses" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Users" EntityType="Self.Users" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK__DiscGenre__typeI__3B75D760" Association="Self.FK__DiscGenre__typeI__3B75D760">
+            <End Role="DiscTypes" EntitySet="DiscTypes" />
+            <End Role="DiscGenres" EntitySet="DiscGenres" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Discs__discAutho__440B1D61" Association="Self.FK__Discs__discAutho__440B1D61">
+            <End Role="Authors" EntitySet="Authors" />
+            <End Role="Discs" EntitySet="Discs" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Discs__genreID__44FF419A" Association="Self.FK__Discs__genreID__44FF419A">
+            <End Role="DiscGenres" EntitySet="DiscGenres" />
+            <End Role="Discs" EntitySet="Discs" />
+          </AssociationSet>
+          <AssociationSet Name="FK__OrderItem__discI__5070F446" Association="Self.FK__OrderItem__discI__5070F446">
+            <End Role="Discs" EntitySet="Discs" />
+            <End Role="OrderItem" EntitySet="OrderItem" />
+          </AssociationSet>
+          <AssociationSet Name="FK__OrderItem__order__4F7CD00D" Association="Self.FK__OrderItem__order__4F7CD00D">
+            <End Role="Orders" EntitySet="Orders" />
+            <End Role="OrderItem" EntitySet="OrderItem" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Orders__statusID__4CA06362" Association="Self.FK__Orders__statusID__4CA06362">
+            <End Role="Statuses" EntitySet="Statuses" />
+            <End Role="Orders" EntitySet="Orders" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Orders__userID__4AB81AF0" Association="Self.FK__Orders__userID__4AB81AF0">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="Orders" EntitySet="Orders" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Users__roleID__403A8C7D" Association="Self.FK__Users__roleID__403A8C7D">
+            <End Role="Roles" EntitySet="Roles" />
+            <End Role="Users" EntitySet="Users" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="DIPLOMAT_01Model" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Authors">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="authorFirstName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="authorLastName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="authorEmail" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Discs" Relationship="Self.FK__Discs__discAutho__440B1D61" FromRole="Authors" ToRole="Discs" />
+        </EntityType>
+        <EntityType Name="DiscGenres">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="genreName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="typeID" Type="Int32" />
+          <NavigationProperty Name="DiscTypes" Relationship="Self.FK__DiscGenre__typeI__3B75D760" FromRole="DiscGenres" ToRole="DiscTypes" />
+          <NavigationProperty Name="Discs" Relationship="Self.FK__Discs__genreID__44FF419A" FromRole="DiscGenres" ToRole="Discs" />
+        </EntityType>
+        <EntityType Name="Discs">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="discName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="discAuthorID" Type="Int32" />
+          <Property Name="genreID" Type="Int32" />
+          <Property Name="discQuantityInStock" Type="Int32" />
+          <Property Name="discReleaseDate" Type="DateTime" Precision="0" />
+          <Property Name="discDescription" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="discPrice" Type="Int32" />
+          <Property Name="discCoverPath" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Authors" Relationship="Self.FK__Discs__discAutho__440B1D61" FromRole="Discs" ToRole="Authors" />
+          <NavigationProperty Name="DiscGenres" Relationship="Self.FK__Discs__genreID__44FF419A" FromRole="Discs" ToRole="DiscGenres" />
+          <NavigationProperty Name="OrderItem" Relationship="Self.FK__OrderItem__discI__5070F446" FromRole="Discs" ToRole="OrderItem" />
+        </EntityType>
+        <EntityType Name="DiscTypes">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="typeName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="DiscGenres" Relationship="Self.FK__DiscGenre__typeI__3B75D760" FromRole="DiscTypes" ToRole="DiscGenres" />
+        </EntityType>
+        <EntityType Name="OrderItem">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="orderID" Type="Int32" />
+          <Property Name="discID" Type="Int32" />
+          <Property Name="quantity" Type="Int32" />
+          <Property Name="PriceAtTime" Type="Int32" />
+          <NavigationProperty Name="Discs" Relationship="Self.FK__OrderItem__discI__5070F446" FromRole="OrderItem" ToRole="Discs" />
+          <NavigationProperty Name="Orders" Relationship="Self.FK__OrderItem__order__4F7CD00D" FromRole="OrderItem" ToRole="Orders" />
+        </EntityType>
+        <EntityType Name="Orders">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="userID" Type="Int32" />
+          <Property Name="orderDateOfPurchase" Type="DateTime" Precision="0" />
+          <Property Name="totalSum" Type="Int32" />
+          <Property Name="statusID" Type="Int32" />
+          <NavigationProperty Name="OrderItem" Relationship="Self.FK__OrderItem__order__4F7CD00D" FromRole="Orders" ToRole="OrderItem" />
+          <NavigationProperty Name="Statuses" Relationship="Self.FK__Orders__statusID__4CA06362" FromRole="Orders" ToRole="Statuses" />
+          <NavigationProperty Name="Users" Relationship="Self.FK__Orders__userID__4AB81AF0" FromRole="Orders" ToRole="Users" />
+        </EntityType>
+        <EntityType Name="Roles">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="roleName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Users" Relationship="Self.FK__Users__roleID__403A8C7D" FromRole="Roles" ToRole="Users" />
+        </EntityType>
+        <EntityType Name="Statuses">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="statusName" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Orders" Relationship="Self.FK__Orders__statusID__4CA06362" FromRole="Statuses" ToRole="Orders" />
+        </EntityType>
+        <EntityType Name="Users">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="userName" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="userPassword" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="roleID" Type="Int32" />
+          <Property Name="userFirstName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="userLastName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="userEmail" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="userBalance" Type="Int32" />
+          <Property Name="userRegDate" Type="DateTime" Precision="0" />
+          <NavigationProperty Name="Orders" Relationship="Self.FK__Orders__userID__4AB81AF0" FromRole="Users" ToRole="Orders" />
+          <NavigationProperty Name="Roles" Relationship="Self.FK__Users__roleID__403A8C7D" FromRole="Users" ToRole="Roles" />
+        </EntityType>
+        <Association Name="FK__Discs__discAutho__440B1D61">
+          <End Role="Authors" Type="Self.Authors" Multiplicity="0..1" />
+          <End Role="Discs" Type="Self.Discs" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Authors">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Discs">
+              <PropertyRef Name="discAuthorID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__DiscGenre__typeI__3B75D760">
+          <End Role="DiscTypes" Type="Self.DiscTypes" Multiplicity="0..1" />
+          <End Role="DiscGenres" Type="Self.DiscGenres" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="DiscTypes">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="DiscGenres">
+              <PropertyRef Name="typeID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Discs__genreID__44FF419A">
+          <End Role="DiscGenres" Type="Self.DiscGenres" Multiplicity="0..1" />
+          <End Role="Discs" Type="Self.Discs" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="DiscGenres">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Discs">
+              <PropertyRef Name="genreID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__OrderItem__discI__5070F446">
+          <End Role="Discs" Type="Self.Discs" Multiplicity="0..1" />
+          <End Role="OrderItem" Type="Self.OrderItem" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Discs">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="OrderItem">
+              <PropertyRef Name="discID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__OrderItem__order__4F7CD00D">
+          <End Role="Orders" Type="Self.Orders" Multiplicity="0..1" />
+          <End Role="OrderItem" Type="Self.OrderItem" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Orders">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="OrderItem">
+              <PropertyRef Name="orderID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Orders__statusID__4CA06362">
+          <End Role="Statuses" Type="Self.Statuses" Multiplicity="0..1" />
+          <End Role="Orders" Type="Self.Orders" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Statuses">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Orders">
+              <PropertyRef Name="statusID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Orders__userID__4AB81AF0">
+          <End Role="Users" Type="Self.Users" Multiplicity="0..1" />
+          <End Role="Orders" Type="Self.Orders" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Orders">
+              <PropertyRef Name="userID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Users__roleID__403A8C7D">
+          <End Role="Roles" Type="Self.Roles" Multiplicity="0..1" />
+          <End Role="Users" Type="Self.Users" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Roles">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Users">
+              <PropertyRef Name="roleID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="DIPLOMAT_01Entities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Authors" EntityType="Self.Authors" />
+          <EntitySet Name="DiscGenres" EntityType="Self.DiscGenres" />
+          <EntitySet Name="Discs" EntityType="Self.Discs" />
+          <EntitySet Name="DiscTypes" EntityType="Self.DiscTypes" />
+          <EntitySet Name="OrderItem" EntityType="Self.OrderItem" />
+          <EntitySet Name="Orders" EntityType="Self.Orders" />
+          <EntitySet Name="Roles" EntityType="Self.Roles" />
+          <EntitySet Name="Statuses" EntityType="Self.Statuses" />
+          <EntitySet Name="Users" EntityType="Self.Users" />
+          <AssociationSet Name="FK__Discs__discAutho__440B1D61" Association="Self.FK__Discs__discAutho__440B1D61">
+            <End Role="Authors" EntitySet="Authors" />
+            <End Role="Discs" EntitySet="Discs" />
+          </AssociationSet>
+          <AssociationSet Name="FK__DiscGenre__typeI__3B75D760" Association="Self.FK__DiscGenre__typeI__3B75D760">
+            <End Role="DiscTypes" EntitySet="DiscTypes" />
+            <End Role="DiscGenres" EntitySet="DiscGenres" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Discs__genreID__44FF419A" Association="Self.FK__Discs__genreID__44FF419A">
+            <End Role="DiscGenres" EntitySet="DiscGenres" />
+            <End Role="Discs" EntitySet="Discs" />
+          </AssociationSet>
+          <AssociationSet Name="FK__OrderItem__discI__5070F446" Association="Self.FK__OrderItem__discI__5070F446">
+            <End Role="Discs" EntitySet="Discs" />
+            <End Role="OrderItem" EntitySet="OrderItem" />
+          </AssociationSet>
+          <AssociationSet Name="FK__OrderItem__order__4F7CD00D" Association="Self.FK__OrderItem__order__4F7CD00D">
+            <End Role="Orders" EntitySet="Orders" />
+            <End Role="OrderItem" EntitySet="OrderItem" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Orders__statusID__4CA06362" Association="Self.FK__Orders__statusID__4CA06362">
+            <End Role="Statuses" EntitySet="Statuses" />
+            <End Role="Orders" EntitySet="Orders" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Orders__userID__4AB81AF0" Association="Self.FK__Orders__userID__4AB81AF0">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="Orders" EntitySet="Orders" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Users__roleID__403A8C7D" Association="Self.FK__Users__roleID__403A8C7D">
+            <End Role="Roles" EntitySet="Roles" />
+            <End Role="Users" EntitySet="Users" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="DIPLOMAT_01ModelStoreContainer" CdmEntityContainer="DIPLOMAT_01Entities">
+          <EntitySetMapping Name="Authors">
+            <EntityTypeMapping TypeName="DIPLOMAT_01Model.Authors">
+              <MappingFragment StoreEntitySet="Authors">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="authorFirstName" ColumnName="authorFirstName" />
+                <ScalarProperty Name="authorLastName" ColumnName="authorLastName" />
+                <ScalarProperty Name="authorEmail" ColumnName="authorEmail" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="DiscGenres">
+            <EntityTypeMapping TypeName="DIPLOMAT_01Model.DiscGenres">
+              <MappingFragment StoreEntitySet="DiscGenres">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="genreName" ColumnName="genreName" />
+                <ScalarProperty Name="typeID" ColumnName="typeID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Discs">
+            <EntityTypeMapping TypeName="DIPLOMAT_01Model.Discs">
+              <MappingFragment StoreEntitySet="Discs">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="discName" ColumnName="discName" />
+                <ScalarProperty Name="discAuthorID" ColumnName="discAuthorID" />
+                <ScalarProperty Name="genreID" ColumnName="genreID" />
+                <ScalarProperty Name="discQuantityInStock" ColumnName="discQuantityInStock" />
+                <ScalarProperty Name="discReleaseDate" ColumnName="discReleaseDate" />
+                <ScalarProperty Name="discDescription" ColumnName="discDescription" />
+                <ScalarProperty Name="discPrice" ColumnName="discPrice" />
+                <ScalarProperty Name="discCoverPath" ColumnName="discCoverPath" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="DiscTypes">
+            <EntityTypeMapping TypeName="DIPLOMAT_01Model.DiscTypes">
+              <MappingFragment StoreEntitySet="DiscTypes">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="typeName" ColumnName="typeName" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="OrderItem">
+            <EntityTypeMapping TypeName="DIPLOMAT_01Model.OrderItem">
+              <MappingFragment StoreEntitySet="OrderItem">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="orderID" ColumnName="orderID" />
+                <ScalarProperty Name="discID" ColumnName="discID" />
+                <ScalarProperty Name="quantity" ColumnName="quantity" />
+                <ScalarProperty Name="PriceAtTime" ColumnName="PriceAtTime" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Orders">
+            <EntityTypeMapping TypeName="DIPLOMAT_01Model.Orders">
+              <MappingFragment StoreEntitySet="Orders">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="userID" ColumnName="userID" />
+                <ScalarProperty Name="orderDateOfPurchase" ColumnName="orderDateOfPurchase" />
+                <ScalarProperty Name="totalSum" ColumnName="totalSum" />
+                <ScalarProperty Name="statusID" ColumnName="statusID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Roles">
+            <EntityTypeMapping TypeName="DIPLOMAT_01Model.Roles">
+              <MappingFragment StoreEntitySet="Roles">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="roleName" ColumnName="roleName" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Statuses">
+            <EntityTypeMapping TypeName="DIPLOMAT_01Model.Statuses">
+              <MappingFragment StoreEntitySet="Statuses">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="statusName" ColumnName="statusName" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Users">
+            <EntityTypeMapping TypeName="DIPLOMAT_01Model.Users">
+              <MappingFragment StoreEntitySet="Users">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="userName" ColumnName="userName" />
+                <ScalarProperty Name="userPassword" ColumnName="userPassword" />
+                <ScalarProperty Name="roleID" ColumnName="roleID" />
+                <ScalarProperty Name="userFirstName" ColumnName="userFirstName" />
+                <ScalarProperty Name="userLastName" ColumnName="userLastName" />
+                <ScalarProperty Name="userEmail" ColumnName="userEmail" />
+                <ScalarProperty Name="userBalance" ColumnName="userBalance" />
+                <ScalarProperty Name="userRegDate" ColumnName="userRegDate" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

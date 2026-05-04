@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="597877415d0e4977a9e5ade5a487814b" Name="Diagram1">
+        <EntityTypeShape EntityType="DIPLOMAT_01Model.Authors" Width="1.5" PointX="3" PointY="8.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="DIPLOMAT_01Model.DiscGenres" Width="1.5" PointX="3" PointY="11.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="DIPLOMAT_01Model.Discs" Width="1.5" PointX="5.25" PointY="9.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="DIPLOMAT_01Model.DiscTypes" Width="1.5" PointX="0.75" PointY="11.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="DIPLOMAT_01Model.OrderItem" Width="1.5" PointX="7.5" PointY="1.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="DIPLOMAT_01Model.Orders" Width="1.5" PointX="5.25" PointY="1.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="DIPLOMAT_01Model.Roles" Width="1.5" PointX="0.75" PointY="1.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="DIPLOMAT_01Model.Statuses" Width="1.5" PointX="3" PointY="5.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="DIPLOMAT_01Model.Users" Width="1.5" PointX="3" PointY="1" IsExpanded="true" />
+        <AssociationConnector Association="DIPLOMAT_01Model.FK__Discs__discAutho__440B1D61" ManuallyRouted="false" />
+        <AssociationConnector Association="DIPLOMAT_01Model.FK__DiscGenre__typeI__3B75D760" ManuallyRouted="false" />
+        <AssociationConnector Association="DIPLOMAT_01Model.FK__Discs__genreID__44FF419A" ManuallyRouted="false" />
+        <AssociationConnector Association="DIPLOMAT_01Model.FK__OrderItem__discI__5070F446" ManuallyRouted="false" />
+        <AssociationConnector Association="DIPLOMAT_01Model.FK__OrderItem__order__4F7CD00D" ManuallyRouted="false" />
+        <AssociationConnector Association="DIPLOMAT_01Model.FK__Orders__statusID__4CA06362" ManuallyRouted="false" />
+        <AssociationConnector Association="DIPLOMAT_01Model.FK__Orders__userID__4AB81AF0" ManuallyRouted="false" />
+        <AssociationConnector Association="DIPLOMAT_01Model.FK__Users__roleID__403A8C7D" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>
