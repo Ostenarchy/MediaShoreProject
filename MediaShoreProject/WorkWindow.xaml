@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MediaShoreProject"
         mc:Ignorable="d"
-        Title="WorkWindow" Height="678" Width="800"
+        Title="MediaStore" Height="678" Width="893"
         WindowStartupLocation="CenterScreen">
     <Grid Margin="10">
         <Grid.RowDefinitions>
@@ -14,10 +14,25 @@
             <RowDefinition Height="30"/>
         </Grid.RowDefinitions>
         
-            <StackPanel Grid.Row="0" HorizontalAlignment="Left">
+            <StackPanel Grid.Row="0" HorizontalAlignment="Left" Orientation="Horizontal">
                 <Button x:Name="btnDisconnect" Content="Выйти" Background="red" Foreground="white" Click="btnDisconnect_Click" Width="100" Height="51" FontSize="22"/>
-                
+            <StackPanel Orientation="Horizontal" Margin="50,0,0,0">
+                <TextBlock VerticalAlignment="Center" Text="Поиск: "/>
+                <TextBox x:Name="tbSearch" Width="300" Height="50" VerticalContentAlignment="Center" TextChanged="tbSearch_TextChanged" HorizontalAlignment="Left" />
             </StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="Тип диска: " VerticalAlignment="Center" Margin="10,0,0,0"/>
+                <ComboBox x:Name="cbDiscType" Height="50" VerticalContentAlignment="Center"  SelectionChanged="cbDiscType_SelectionChanged"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="Сортировка: " VerticalAlignment="Center" Margin="10,0,0,0"/>
+                <StackPanel VerticalAlignment="Center">
+                    <RadioButton x:Name="rbAB" Content="По алфавиту" Checked="rbAB_Checked"/>
+                    <RadioButton x:Name="rbBA" Content="Против алфавита" Checked="rbBA_Checked"/>
+                    <RadioButton x:Name="rbDEF" Content="Не сортировать" Checked="rbDEF_Checked" IsChecked="True"/>
+                </StackPanel>
+            </StackPanel>
+        </StackPanel>
 
 
         <ListBox Grid.Row="1" x:Name="lbDisc" ScrollViewer.VerticalScrollBarVisibility="Auto">
@@ -43,13 +58,29 @@
                         </StackPanel>
 
                         <StackPanel Grid.Column="2">
-                            <TextBlock Text="{Binding quantity}" FontSize="26"/>
+                            <!--<TextBlock Text="{Binding quantity}" FontSize="26"/>-->
                             <TextBlock Text="{Binding price}"/>
                             <StackPanel Orientation="Horizontal">
-                                <Button Width="30" Height="30" Content="+" x:Name="btnAddToCart" Click="btnAddToCart_Click"/> <!--кнопочка-->
+                                <Button Content="-" Width="30" Height="30" Click="Button_Click">
+                                    <Button.Style>
+                                        <Style TargetType="Button">
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding quantity}" Value="0">
+                                                    <Setter Property="IsEnabled" Value="False"/>
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Button.Style>
+                                </Button>
+
+                                <TextBlock Text="{Binding quantity}" Margin="15,0" FontSize="18" 
+                           VerticalAlignment="Center" MinWidth="25" TextAlignment="Center"/>
+
+                                <!-- Кнопка Плюс -->
+                                <Button Content="+" Width="30" Height="30" Click="Button_Click_1"/>
                             </StackPanel>
                         </StackPanel>
-                        </Grid>
+                    </Grid>
                     </DataTemplate>
                 </ListBox.ItemTemplate>
             </ListBox>
@@ -59,6 +90,8 @@
         <StackPanel Grid.Row="2" Orientation="Horizontal">
             <TextBlock x:Name="textBlockUserRole" Text="ROLE:"/>
             <TextBlock Margin="5,0,0,0" x:Name="textBlockUserFIO" Text="NICKNAME"/>
+            <TextBlock Margin="5,0,0,0" x:Name="textBlockBalance" Text="(BALANCE)"/>
+            <Button x:Name="btnCart" Content="Корзина (0)" Margin="20,0,0,0" Click="btnCart_Click" Width="120"/>
         </StackPanel>
 
     </Grid>
