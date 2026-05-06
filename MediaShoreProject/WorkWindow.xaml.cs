@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -38,6 +39,17 @@ namespace MediaShoreProject
         {
             List<Discs> disc = App.db.Discs.ToList();
             lbDisc.ItemsSource = disc;
+
+            
+                // загрузка типов дисков для комбобокса
+                List<DiscTypes> ds = App.db.DiscTypes.ToList();
+                ds.Insert(0, new DiscTypes { id = 0, typeName = "Все типы" });
+
+                cbDiscType.ItemsSource = ds;
+                cbDiscType.DisplayMemberPath = "typeName"; // Что видит пользователь
+                cbDiscType.SelectedValuePath = "id";      // Что получаем при выборе
+                cbDiscType.SelectedIndex = 0;
+            
         }
         public WorkWindow(Users user)
         {
@@ -195,6 +207,68 @@ namespace MediaShoreProject
             {
                 MessageBox.Show("Ошибка: " + ex.Message);
             }
+        }
+
+        private void ApplyFilters()
+        {
+            // ПРОВЕРКА: Если ListBox еще не инициализирован, выходим из метода
+            if (lbDisc == null) return;
+            // Начинаем с полного списка дисков
+            var query = App.db.Discs.AsQueryable();
+
+            // 1. Фильтрация по типу диска (через DiscGenres.typeID)
+            if (cbDiscType.SelectedValue != null && (int)cbDiscType.SelectedValue != 0)
+            {
+                int selectedTypeId = (int)cbDiscType.SelectedValue;
+                query = query.Where(d => d.DiscGenres.typeID == selectedTypeId);
+            }
+
+            // 2. Поиск по названию
+            string searchText = tbSearch.Text.Trim().ToLower();
+            if (!string.IsNullOrWhiteSpace(searchText))
+            {
+                query = query.Where(d => d.discName.ToLower().Contains(searchText));
+            }
+
+            // 3. Сортировка
+            if (rbAB.IsChecked == true)
+            {
+                query = query.OrderBy(d => d.discName);
+            }
+            else if (rbBA.IsChecked == true)
+            {
+                query = query.OrderByDescending(d => d.discName);
+            }
+            // Если выбран rbDEF (IsChecked == true), OrderBy просто не применяется, 
+            // и данные идут в порядке их ID из базы.
+
+            // Выводим результат в ListBox
+            lbDisc.ItemsSource = query.ToList();
+        }
+
+        private void cbDiscType_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            ApplyFilters();
+        }
+
+        private void tbSearch_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            ApplyFilters();
+        }
+
+        private void rbAB_Checked(object sender, RoutedEventArgs e)
+        {
+            ApplyFilters();
+        }
+
+        private void rbBA_Checked(object sender, RoutedEventArgs e)
+        {
+            ApplyFilters();
+        }
+
+        private void rbDEF_Checked(object sender, RoutedEventArgs e)
+        {
+            ApplyFilters();
         }
     }
 }
