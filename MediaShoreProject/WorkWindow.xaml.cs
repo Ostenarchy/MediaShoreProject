@@ -39,21 +39,28 @@ namespace MediaShoreProject
                     btnAdd.Visibility = Visibility.Visible;
                     btnDelete.Visibility = Visibility.Visible;
                     btnEdit.Visibility = Visibility.Visible;
+                    btnAdmin.Visibility = Visibility.Visible;
                     break;
                 case 2:
                     btnEdit.Visibility = Visibility.Visible;
                     btnDelete.Visibility = Visibility.Collapsed;
                     btnAdd.Visibility = Visibility.Collapsed;
+                    btnAdmin.Visibility = Visibility.Collapsed;
+
                     break;
                 case 3:
                     btnEdit.Visibility = Visibility.Collapsed;
                     btnDelete.Visibility = Visibility.Collapsed;
                     btnAdd.Visibility = Visibility.Collapsed;
+                    btnAdmin.Visibility = Visibility.Collapsed;
+
                     break;
                 default:
                     btnEdit.Visibility = Visibility.Collapsed;
                     btnDelete.Visibility = Visibility.Collapsed;
                     btnAdd.Visibility = Visibility.Collapsed;
+                    btnAdmin.Visibility = Visibility.Collapsed;
+
                     break;
             }
             
@@ -390,6 +397,14 @@ namespace MediaShoreProject
         private void btnRefresh_Click(object sender, RoutedEventArgs e)
         {
             LoadDiscs();
+        }
+
+        private void btnAdmin_Click(object sender, RoutedEventArgs e)
+        {
+            OrdersWindow ow = new OrdersWindow();
+            ow.ShowDialog();
+            LoadDiscs();
+            ApplyFilters();
         }
     }
 }
