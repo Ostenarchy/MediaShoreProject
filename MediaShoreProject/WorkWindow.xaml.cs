@@ -33,6 +33,30 @@ namespace MediaShoreProject
                 textBlockUserRole.Text = $"{currentRole.roleName}: ";
                 textBlockBalance.Text = $"({currentUser.userBalance} руб.)";
             }
+            switch (currentUser.roleID)
+            {
+                case 1:
+                    btnAdd.Visibility = Visibility.Visible;
+                    btnDelete.Visibility = Visibility.Visible;
+                    btnEdit.Visibility = Visibility.Visible;
+                    break;
+                case 2:
+                    btnEdit.Visibility = Visibility.Visible;
+                    btnDelete.Visibility = Visibility.Collapsed;
+                    btnAdd.Visibility = Visibility.Collapsed;
+                    break;
+                case 3:
+                    btnEdit.Visibility = Visibility.Collapsed;
+                    btnDelete.Visibility = Visibility.Collapsed;
+                    btnAdd.Visibility = Visibility.Collapsed;
+                    break;
+                default:
+                    btnEdit.Visibility = Visibility.Collapsed;
+                    btnDelete.Visibility = Visibility.Collapsed;
+                    btnAdd.Visibility = Visibility.Collapsed;
+                    break;
+            }
+            
         }
 
         void LoadDiscs() // дефолтный загрузчик данных
@@ -362,5 +386,7 @@ namespace MediaShoreProject
         {
             Edit(currentUser);
         }
+
+
     }
 }
