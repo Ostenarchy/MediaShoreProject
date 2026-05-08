@@ -1,0 +1,29 @@
+﻿<Window x:Class="MediaShoreProject.AddNewOne"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Добавление нового диска" Height="542" Width="400" WindowStartupLocation="CenterScreen">
+    <Grid Margin="20">
+        <StackPanel>
+            <TextBlock Text="Название диска:" Margin="0,5"/>
+            <TextBox x:Name="tbName" Height="30" VerticalContentAlignment="Center"/>
+
+            <TextBlock Text="Автор:" Margin="0,10,0,5"/>
+            <ComboBox x:Name="cbAuthor" Height="30" VerticalContentAlignment="Center"/>
+
+            <TextBlock Text="Жанр:" Margin="0,10,0,5"/>
+            <ComboBox x:Name="cbGenre" Height="30" VerticalContentAlignment="Center"/>
+
+            <TextBlock Text="Цена (руб):" Margin="0,10,0,5"/>
+            <TextBox x:Name="tbPrice" Height="30" VerticalContentAlignment="Center"/>
+
+            <TextBlock Text="Количество на складе:" Margin="0,10,0,5"/>
+            <TextBox x:Name="tbQuantity" Height="30" VerticalContentAlignment="Center"/>
+
+            <TextBlock Text="Дата релиза:" Margin="0,10,0,5"/>
+            <DatePicker x:Name="dpReleaseDate" Height="30" VerticalContentAlignment="Center"/>
+
+            <Button x:Name="btnSave" Content="Сохранить диск" Margin="0,30,0,0" 
+                    Height="40" Background="#4CAF50" Foreground="White" Click="btnSave_Click"/>
+        </StackPanel>
+    </Grid>
+</Window>

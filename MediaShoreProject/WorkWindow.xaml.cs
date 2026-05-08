@@ -270,5 +270,97 @@ namespace MediaShoreProject
         {
             ApplyFilters();
         }
+
+        private void btnAdd_Click(object sender, RoutedEventArgs e)
+        {
+            AddNewOne addWindow = new AddNewOne();
+            // Если окно закрылось с результатом true (сохранение прошло успешно)
+            if (addWindow.ShowDialog() == true)
+            {
+                ApplyFilters(); // Твой метод обновления списка ListBox
+            }
+        }
+
+        private void btnDelete_Click(object sender, RoutedEventArgs e)
+        {
+            // 1. Получаем выбранный объект из ListBox
+            var selectedDisc = lbDisc.SelectedItem as Discs;
+
+            if (selectedDisc == null)
+            {
+                MessageBox.Show("Сначала выбери диск из списка для удаления!", "Внимание");
+                return;
+            }
+
+            // 2. Подтверждение удаления (чтобы не удалить случайно)
+            var result = MessageBox.Show($"Ты уверен, что хочешь безвозвратно удалить диск \"{selectedDisc.discName}\"?",
+                                         "Подтверждение удаления",
+                                         MessageBoxButton.YesNo,
+                                         MessageBoxImage.Question);
+
+            if (result == MessageBoxResult.Yes)
+            {
+                try
+                {
+                    // 3. Проверка на наличие диска в заказах (чтобы база не выдала ошибку FK)
+                    bool hasOrders = App.db.OrderItem.Any(oi => oi.discID == selectedDisc.id);
+                    if (hasOrders)
+                    {
+                        MessageBox.Show("Нельзя удалить этот диск, так как он уже фигурирует в заказах пользователей. " +
+                                        "Вместо удаления лучше установи количество на складе в 0.", "Ошибка связи");
+                        return;
+                    }
+
+                    // 4. Удаляем из контекста и сохраняем
+                    App.db.Discs.Remove(selectedDisc);
+                    App.db.SaveChanges();
+
+                    MessageBox.Show("Диск успешно удален из базы данных.");
+
+                    // 5. Обновляем список, чтобы диск исчез с экрана
+                    ApplyFilters();
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Произошла системная ошибка при удалении: " + ex.Message);
+                }
+            }
+        }
+        public void Edit(Users user)
+        {
+            if (user.roleID == 1 || user.roleID == 2)
+            {
+                // 1. Получаем выбранный диск
+                var selectedDisc = lbDisc.SelectedItem as Discs;
+
+                if (selectedDisc == null)
+                {
+                    MessageBox.Show("Выбери диск из списка для редактирования!", "Внимание");
+                    return;
+                }
+
+                // 2. Открываем окно и передаем туда наш объект
+                AddNewOne editWindow = new AddNewOne(selectedDisc);
+
+                // 3. Если окно закрылось с результатом True (сохранение прошло)
+                if (editWindow.ShowDialog() == true)
+                {
+                    ApplyFilters(); // Обновляем список, чтобы увидеть изменения
+                }
+            }
+            else
+            {
+                MessageBox.Show("Недостаточно прав для редактирования товара");
+            }
+        }
+        private void btnEdit_Click(object sender, RoutedEventArgs e)
+        {
+            Edit(currentUser);
+        }
+
+        private void lbDisc_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            Edit(currentUser);
+        }
     }
 }
