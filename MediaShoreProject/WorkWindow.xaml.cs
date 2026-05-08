@@ -387,6 +387,9 @@ namespace MediaShoreProject
             Edit(currentUser);
         }
 
-
+        private void btnRefresh_Click(object sender, RoutedEventArgs e)
+        {
+            LoadDiscs();
+        }
     }
 }

@@ -97,6 +97,8 @@
                 <Button x:Name="btnAdd" Content="(+) Добавить новый" Click="btnAdd_Click" />
                 <Button x:Name="btnEdit" Content="(~) Редактировать" Margin="10,0,10,0" Click="btnEdit_Click" />
                 <Button x:Name="btnDelete" Content="(x) Удалить" Click="btnDelete_Click" />
+
+                <Button x:Name="btnRefresh" Content="Обновить" Background="Lime" Click="btnRefresh_Click"/>
             </StackPanel>
         </StackPanel>
         

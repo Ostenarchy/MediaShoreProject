@@ -57,6 +57,7 @@ namespace MediaShoreProject
                 _currentDisc.discPrice = int.Parse(tbPrice.Text);
                 _currentDisc.discQuantityInStock = int.Parse(tbQuantity.Text);
                 _currentDisc.discReleaseDate = dpReleaseDate.SelectedDate ?? DateTime.Now;
+                _currentDisc.discCoverPath = "default.jpg";
 
                 if (isNew) App.db.Discs.Add(_currentDisc);
 
