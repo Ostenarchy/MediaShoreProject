@@ -85,6 +85,12 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="AddNewOne.xaml.cs">
+      <DependentUpon>AddNewOne.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="AdminEditWindow.xaml.cs">
+      <DependentUpon>AdminEditWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Authors.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
@@ -114,8 +120,14 @@
     <Compile Include="Orders.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
+    <Compile Include="OrdersWindow.xaml.cs">
+      <DependentUpon>OrdersWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Roles.cs">
       <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="StatusEditWindow.xaml.cs">
+      <DependentUpon>StatusEditWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Statuses.cs">
       <DependentUpon>Model1.tt</DependentUpon>
@@ -126,6 +138,14 @@
     <Compile Include="WorkWindow.xaml.cs">
       <DependentUpon>WorkWindow.xaml</DependentUpon>
     </Compile>
+    <Page Include="AddNewOne.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="AdminEditWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="CartWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -143,6 +163,14 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="NewUserWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="OrdersWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="StatusEditWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -201,6 +229,7 @@
     <Resource Include="icon.png" />
     <Resource Include="covers\inception.jpg" />
     <Resource Include="covers\interstellar_music.jpg" />
+    <Resource Include="default.jpg" />
     <Content Include="covers\pulp_fiction.jpg" />
     <Resource Include="covers\shining.jpg" />
     <Content Include="Model1.Context.tt">

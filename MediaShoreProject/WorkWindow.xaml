@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MediaShoreProject"
         mc:Ignorable="d"
-        Title="MediaStore" Height="678" Width="893"
+        Title="MediaStore" Height="678" Width="974"
         WindowStartupLocation="CenterScreen">
     <Grid Margin="10">
         <Grid.RowDefinitions>
@@ -35,7 +35,7 @@
         </StackPanel>
 
 
-        <ListBox Grid.Row="1" x:Name="lbDisc" ScrollViewer.VerticalScrollBarVisibility="Auto">
+        <ListBox Grid.Row="1" x:Name="lbDisc" ScrollViewer.VerticalScrollBarVisibility="Auto" MouseDoubleClick="lbDisc_MouseDoubleClick">
                 <ListBox.ItemTemplate>
                     <DataTemplate>
                         <Grid>
@@ -84,15 +84,25 @@
                     </DataTemplate>
                 </ListBox.ItemTemplate>
             </ListBox>
-            
-        
+
 
         <StackPanel Grid.Row="2" Orientation="Horizontal">
-            <TextBlock x:Name="textBlockUserRole" Text="ROLE:"/>
-            <TextBlock Margin="5,0,0,0" x:Name="textBlockUserFIO" Text="NICKNAME"/>
-            <TextBlock Margin="5,0,0,0" x:Name="textBlockBalance" Text="(BALANCE)"/>
-            <Button x:Name="btnCart" Content="Корзина (0)" Margin="20,0,0,0" Click="btnCart_Click" Width="120"/>
+            <StackPanel Grid.Row="2" Orientation="Horizontal">
+                <TextBlock x:Name="textBlockUserRole" Text="ROLE:"/>
+                <TextBlock Margin="5,0,0,0" x:Name="textBlockUserFIO" Text="NICKNAME"/>
+                <TextBlock Margin="5,0,0,0" x:Name="textBlockBalance" Text="(BALANCE)"/>
+                <Button x:Name="btnCart" Content="Корзина (0)" Margin="20,0,0,0" Click="btnCart_Click" Width="120"/>
+            </StackPanel>
+            <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="50,0,0,0">
+                <Button x:Name="btnAdd" Content="(+) Добавить новый" Click="btnAdd_Click" />
+                <Button x:Name="btnEdit" Content="(~) Редактировать" Margin="10,0,10,0" Click="btnEdit_Click" />
+                <Button x:Name="btnDelete" Content="(x) Удалить" Click="btnDelete_Click" />
+                <Button x:Name="btnAdmin" Content="Админпанель" Margin="30,0,0,0" Width="83" Background="Orange" Foreground="Black" Click="btnAdmin_Click" />
+                <Button Margin="5,0,0,0" x:Name="btnRefresh" Content="Обновить" Background="Lime" Click="btnRefresh_Click"/>
+            </StackPanel>
         </StackPanel>
+        
+        
 
     </Grid>
 </Window>
